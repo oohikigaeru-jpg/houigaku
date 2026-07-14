@@ -613,13 +613,26 @@ header h1 {
 
 .result-text {
     font-family: var(--font-serif);
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
+    line-height: 1.5;
     text-align: justify;
     padding: 0 6px;
     flex-grow: 1;
-    display: flex;
-    align-items: center;
+    display: block;
+    overflow-y: auto;
+    max-height: 155px;
+}
+
+/* 占いテキストの極細和風スクロールバー */
+.result-text::-webkit-scrollbar {
+    width: 3px;
+}
+.result-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+.result-text::-webkit-scrollbar-thumb {
+    background: rgba(201, 42, 42, 0.35);
+    border-radius: 1.5px;
 }
 
 .result-footer {
