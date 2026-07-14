@@ -1,0 +1,722 @@
+/* =======================================================
+   ☯ 陰陽鬼門羅盤・日暦占術 スタイル定義 (style.css)
+   ======================================================= */
+
+:root {
+    --color-bg: #09090b;
+    --color-gold: #d4af37;
+    --color-gold-glow: rgba(212, 175, 55, 0.4);
+    --color-red: #c92a2a;
+    --color-red-glow: rgba(201, 42, 42, 0.5);
+    --color-purple: #3b0066;
+    --color-text: #f1f3f5;
+    --color-text-muted: #adb5bd;
+    --color-glass-bg: rgba(18, 18, 22, 0.75);
+    --color-glass-border: rgba(212, 175, 55, 0.2);
+    
+    --font-serif: 'Shippori Mincho', 'Noto Serif JP', 'Yu Mincho', serif;
+    --font-sans: 'Noto Serif JP', sans-serif;
+    --font-english: 'Cinzel', serif;
+}
+
+/* 🌀 基本リセットとスクロール制御 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 🌫️ 陰陽五行の雰囲気づくり（背景エフェクト） */
+.mist-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(20, 10, 30, 0.3) 0%, rgba(5, 5, 5, 0.9) 100%);
+    z-index: -2;
+    pointer-events: none;
+}
+
+.glow-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: -1;
+    pointer-events: none;
+    transition: background 1s ease;
+    border-radius: 50%;
+}
+
+/* 鬼門警告時の赤発光 */
+.glow-warn {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(0, 0, 0, 0) 70%) !important;
+}
+
+/* 📱 アプリメインコンテナ */
+#app-container {
+    width: 100%;
+    max-width: 480px; /* スマートフォンサイズに固定 */
+    background: linear-gradient(180deg, rgba(13, 13, 17, 0.95) 0%, rgba(8, 8, 10, 0.98) 100%);
+    border-left: 1px solid rgba(212, 175, 55, 0.1);
+    border-right: 1px solid rgba(212, 175, 55, 0.1);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 1;
+}
+
+/* ⛩️ ヘッダーデザイン */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px double var(--color-gold);
+}
+
+.header-emblem {
+    font-size: 2rem;
+    color: var(--color-gold);
+    text-shadow: 0 0 10px var(--color-gold-glow);
+    animation: rotateEmblem 20s infinite linear;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+@keyframes rotateEmblem {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+header h1 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2px;
+}
+
+.subtitle {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    letter-spacing: 6px;
+    text-indent: 6px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.date-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.element-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 1px solid currentColor;
+}
+.badge-water { color: #38bdf8; background-color: rgba(56, 189, 248, 0.1); }
+.badge-wood { color: #4ade80; background-color: rgba(74, 222, 128, 0.1); }
+.badge-fire { color: #f87171; background-color: rgba(248, 113, 113, 0.1); }
+.badge-earth { color: #fbbf24; background-color: rgba(251, 191, 36, 0.1); }
+.badge-metal { color: #e2e8f0; background-color: rgba(226, 232, 240, 0.1); }
+
+/* 🧭 羅盤（コンパス）のレイアウト */
+#compass-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.heading-display {
+    text-align: center;
+    margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 90%;
+    align-items: center;
+    background: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 30px;
+    padding: 6px 12px;
+}
+
+.direction-badge {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    text-shadow: 0 0 5px var(--color-gold-glow);
+}
+
+.angle-display {
+    font-family: var(--font-english);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.fortune-badge {
+    justify-self: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid currentColor;
+}
+.fortune-badge.good { color: #4ade80; background-color: rgba(74, 222, 128, 0.1); }
+.fortune-badge.normal { color: #e2e8f0; background-color: rgba(226, 232, 240, 0.1); }
+.fortune-badge.bad {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.15);
+    animation: pulseBad 1s infinite alternate;
+}
+
+@keyframes pulseBad {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+    100% { transform: scale(1.05); box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+}
+
+/* 羅盤本体 */
+.compass-outer {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1a1a24 0%, #0d0d12 70%, #050508 100%);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(212, 175, 55, 0.2);
+    border: 6px double var(--color-gold);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: border-color 0.3s ease;
+}
+
+.compass-outer.warn {
+    border-color: #ef4444;
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4),
+                inset 0 0 20px rgba(239, 68, 68, 0.3);
+    animation: vibrateCompass 0.15s infinite linear;
+}
+
+@keyframes vibrateCompass {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-1px, -1px) rotate(0.5deg); }
+    40% { transform: translate(-1px, 1px) rotate(-0.5deg); }
+    60% { transform: translate(1px, -1px) rotate(0deg); }
+    80% { transform: translate(-1px, -1px) rotate(0.5deg); }
+    100% { transform: translate(1px, 1px) rotate(-0.5deg); }
+}
+
+/* 指針 */
+.compass-pointer {
+    position: absolute;
+    top: -5px;
+    color: #ef4444;
+    font-size: 1.1rem;
+    z-index: 10;
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+    pointer-events: none;
+}
+
+/* 回転する羅盤SVG */
+.compass-disk {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+    transform-origin: center center;
+}
+
+/* SVG内装飾 */
+.compass-ring {
+    fill: none;
+    stroke: var(--color-gold);
+    stroke-opacity: 0.4;
+    stroke-width: 1px;
+}
+.ring-outer { stroke-opacity: 0.6; }
+.ring-inner { stroke-opacity: 0.5; stroke-dasharray: 2 2; }
+
+.compass-grid {
+    stroke: var(--color-gold);
+    stroke-opacity: 0.15;
+    stroke-width: 0.75px;
+}
+
+.compass-text {
+    fill: var(--color-text-muted);
+    font-size: 11px;
+    font-family: var(--font-sans);
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+.compass-text.text-bold {
+    font-weight: bold;
+    fill: var(--color-text);
+    font-size: 13px;
+}
+.compass-text.text-red {
+    fill: #ef4444 !important;
+}
+.compass-text.text-warn {
+    fill: #f59e0b !important;
+}
+.compass-text.text-symbol {
+    font-size: 16px;
+    fill: var(--color-gold);
+}
+
+.warn-dot {
+    animation: blinkWarnDot 1s infinite alternate;
+}
+@keyframes blinkWarnDot {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* 🎛️ グラスパネル（共通UI） */
+.glass-panel {
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color 0.3s ease;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 8px;
+}
+.control-row:last-child {
+    margin-bottom: 0;
+}
+
+/* 手動スライダー */
+.manual-adjust {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+.manual-adjust input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #27272a;
+    outline: none;
+    -webkit-appearance: none;
+}
+.manual-adjust input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
+    border: 1px solid var(--color-gold);
+    color: var(--color-text);
+    padding: 10px 18px;
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.btn-primary:active {
+    transform: scale(0.97);
+    background: #18181b;
+}
+
+.sync-status {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* 📜 方位解説テキストパネル */
+.text-panel {
+    border-left: 3px solid var(--color-gold);
+}
+.text-panel.warn {
+    border-left-color: #ef4444;
+    animation: borderWarn 1s infinite alternate;
+}
+@keyframes borderWarn {
+    0% { border-left-color: rgba(239, 68, 68, 0.4); }
+    100% { border-left-color: rgba(239, 68, 68, 1); }
+}
+
+.text-panel h3 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--color-gold);
+    margin-bottom: 6px;
+}
+.text-panel p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+/* 🏷️ 占術・おみくじセクション */
+#fortune-section {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--color-gold);
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* お札の3Dカードデザイン */
+.talisman-container {
+    perspective: 1000px;
+    width: 180px;
+    height: 320px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.talisman-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.talisman-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.talisman-back, .talisman-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* お札の裏面（未開封） */
+.talisman-back {
+    background: #fdfaf2; /* 和紙風の薄黄色 */
+    border: 8px double #111111;
+    color: #111111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.ofuda-frame {
+    border: 1px solid #111111;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 5px;
+    position: relative;
+}
+
+.ofuda-text {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.2rem;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 6px;
+    line-height: 1.3;
+}
+
+.ofuda-seal {
+    font-size: 1.8rem;
+    margin: 10px 0;
+    color: var(--color-red);
+}
+
+.ofuda-prompt {
+    font-size: 0.7rem;
+    color: #555555;
+    text-align: center;
+    line-height: 1.4;
+    border-top: 1px dashed #111111;
+    padding-top: 8px;
+    width: 80%;
+}
+
+/* お札の表面（鑑定結果） */
+.talisman-front {
+    background: #fdfaf2;
+    border: 8px double var(--color-red);
+    color: #111111;
+    transform: rotateY(180deg);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ofuda-result {
+    border: 1px solid var(--color-red);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 6px;
+    justify-content: space-between;
+}
+
+.result-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--color-red);
+    letter-spacing: 2px;
+}
+
+.result-element {
+    font-size: 0.75rem;
+    color: #555555;
+    margin-top: 2px;
+}
+
+.ofuda-divider {
+    border: none;
+    border-top: 1px double var(--color-red);
+    width: 90%;
+    margin: 8px 0;
+}
+
+.result-text {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-align: justify;
+    padding: 0 6px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.result-footer {
+    font-size: 0.7rem;
+    color: #777777;
+    margin-top: 5px;
+    border-top: 1px dashed var(--color-red);
+    width: 80%;
+    text-align: center;
+    padding-top: 4px;
+}
+
+/* 🧹 お祓いボタン */
+.purify-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-purify {
+    position: relative;
+    background: linear-gradient(135deg, #4c0000 0%, #800000 100%);
+    border: 2px solid var(--color-gold);
+    color: var(--color-text);
+    padding: 14px 28px;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-radius: 30px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.4);
+}
+
+.purify-btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--color-gold-glow) 0%, transparent 60%);
+    opacity: 0.6;
+    animation: rotateGlow 6s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-purify:hover {
+    box-shadow: 0 4px 25px rgba(212, 175, 55, 0.5),
+                0 0 10px rgba(128, 0, 0, 0.6);
+    border-color: #ffffff;
+}
+.btn-purify:active {
+    transform: scale(0.96);
+    background: #4c0000;
+}
+
+/* 🌌 お祓い全画面オーバーレイ */
+.purify-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.purify-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pentagram-container {
+    width: 220px;
+    height: 220px;
+    margin-bottom: 25px;
+    transform: scale(0.5);
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.purify-overlay.active .pentagram-container {
+    transform: scale(1);
+}
+
+.pentagram-svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--color-gold);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 15px var(--color-gold));
+}
+
+.pentagram-svg polygon {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+}
+.purify-overlay.active .pentagram-svg polygon {
+    animation: drawPentagram 2s forwards ease-in-out;
+}
+
+.pentagram-circle {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+}
+.purify-overlay.active .pentagram-circle {
+    animation: drawCircle 2s forwards ease-in-out 0.5s;
+}
+
+@keyframes drawPentagram {
+    to { stroke-dashoffset: 0; transform: rotate(360deg); transform-origin: 50px 50px; }
+}
+@keyframes drawCircle {
+    to { stroke-dashoffset: 0; }
+}
+
+.purify-text {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    letter-spacing: 12px;
+    text-indent: 12px;
+    text-shadow: 0 0 10px var(--color-gold-glow);
+    opacity: 0;
+    transform: translateY(20px);
+}
+.purify-overlay.active .purify-text {
+    animation: slideUpText 1.5s forwards ease-out 1s;
+}
+
+@keyframes slideUpText {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ⛩️ フッター */
+footer {
+    margin-top: auto;
+    padding-top: 24px;
+    padding-bottom: 8px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
