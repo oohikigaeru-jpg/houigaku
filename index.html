@@ -27,11 +27,47 @@
         <div class="purify-text">急急如律令</div>
     </div>
 
+    <!-- ⚙️ 生年月日入力モーダル (運命調律) -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <h2 class="modal-title">☯ 運命調律 ☯</h2>
+            <p class="modal-subtitle">貴殿の生年月日を記し、宿命の五行を算定いたします。</p>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="birth-year">出生年 (西暦)</label>
+                    <select id="birth-year">
+                        <!-- JSで動的に1900年〜2026年を挿入 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="birth-month">出生月</label>
+                    <select id="birth-month">
+                        <!-- 1〜12月 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="birth-day">出生日</label>
+                    <select id="birth-day">
+                        <!-- 1〜31日 -->
+                    </select>
+                </div>
+                <button id="btn-save-settings" class="btn-purify">
+                    <span class="purify-btn-glow"></span>
+                    <span class="purify-btn-text">宿命を確定する</span>
+                </button>
+            </div>
+            <button id="btn-close-modal" class="modal-close-x" style="display: none;">✕</button>
+        </div>
+    </div>
+
     <!-- 📱 メインコンテナ -->
     <div id="app-container">
         <!-- ⛩️ 神社風ヘッダー -->
         <header>
-            <div class="header-emblem">☯</div>
+            <div class="header-top">
+                <div class="header-emblem">☯</div>
+                <button id="btn-open-settings" class="btn-settings-icon" title="運命調律（生年月日設定）">☯ 運命調律</button>
+            </div>
             <h1>陰陽鬼門羅盤</h1>
             <p class="subtitle">〜日暦占術〜</p>
             <div class="date-panel">
@@ -39,6 +75,20 @@
                 <span id="current-element" class="element-badge badge-water">水気</span>
             </div>
         </header>
+
+        <!-- 🧬 宿命属性表示パネル（ヘッダーと羅盤の間に配置） -->
+        <div id="user-profile-panel" class="glass-panel profile-panel" style="display: none;">
+            <div class="profile-header">
+                <span class="profile-title">貴殿の宿命属性</span>
+                <span id="user-element-badge" class="element-badge">五行</span>
+            </div>
+            <div class="profile-body">
+                <div class="user-kanji-name" id="user-birth-info">生年月日より算定中...</div>
+                <p class="user-desc" id="user-element-desc">
+                    宿命の五行がまだ定まっておりませぬ。右上の「運命調律」より生年月日をご登録くだされ。
+                </p>
+            </div>
+        </div>
 
         <!-- 🧭 羅盤（コンパス）セクション -->
         <main>

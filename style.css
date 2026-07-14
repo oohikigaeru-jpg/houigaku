@@ -11,8 +11,8 @@
     --color-purple: #3b0066;
     --color-text: #f1f3f5;
     --color-text-muted: #adb5bd;
-    --color-glass-bg: rgba(18, 18, 22, 0.75);
-    --color-glass-border: rgba(212, 175, 55, 0.2);
+    --color-glass-bg: rgba(18, 18, 22, 0.82);
+    --color-glass-border: rgba(212, 175, 55, 0.25);
     
     --font-serif: 'Shippori Mincho', 'Noto Serif JP', 'Yu Mincho', serif;
     --font-sans: 'Noto Serif JP', sans-serif;
@@ -91,18 +91,41 @@ body {
 /* ⛩️ ヘッダーデザイン */
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     padding-bottom: 12px;
     border-bottom: 1px double var(--color-gold);
+    position: relative;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
 }
 
 .header-emblem {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--color-gold);
     text-shadow: 0 0 10px var(--color-gold-glow);
     animation: rotateEmblem 20s infinite linear;
     display: inline-block;
-    margin-bottom: 4px;
+}
+
+.btn-settings-icon {
+    background: rgba(20, 20, 25, 0.6);
+    border: 1px solid var(--color-gold-glow);
+    color: var(--color-gold);
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-family: var(--font-serif);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-settings-icon:hover {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 8px var(--color-gold-glow);
 }
 
 @keyframes rotateEmblem {
@@ -145,12 +168,49 @@ header h1 {
     font-size: 0.75rem;
     font-weight: bold;
     border: 1px solid currentColor;
+    display: inline-block;
 }
 .badge-water { color: #38bdf8; background-color: rgba(56, 189, 248, 0.1); }
 .badge-wood { color: #4ade80; background-color: rgba(74, 222, 128, 0.1); }
 .badge-fire { color: #f87171; background-color: rgba(248, 113, 113, 0.1); }
 .badge-earth { color: #fbbf24; background-color: rgba(251, 191, 36, 0.1); }
 .badge-metal { color: #e2e8f0; background-color: rgba(226, 232, 240, 0.1); }
+
+/* 🧬 宿命属性表示パネル */
+.profile-panel {
+    border: 1px solid var(--color-gold-glow);
+    border-left: 3px solid var(--color-gold);
+    margin-bottom: 16px;
+    padding: 10px 14px;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.profile-title {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--color-text-muted);
+}
+
+.user-kanji-name {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-bottom: 4px;
+}
+
+.user-desc {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+}
 
 /* 🧭 羅盤（コンパス）のレイアウト */
 #compass-section {
@@ -709,6 +769,128 @@ header h1 {
 
 @keyframes slideUpText {
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ⚙️ モーダル（生年月日設定）のスタイリング */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 360px;
+    padding: 24px;
+    border: 2.5px double var(--color-gold);
+    background: rgba(15, 15, 20, 0.95);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 
+                0 0 15px var(--color-gold-glow);
+    position: relative;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-title {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--color-gold);
+    margin-bottom: 8px;
+    text-shadow: 0 0 5px var(--color-gold-glow);
+}
+
+.modal-subtitle {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    font-family: var(--font-serif);
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    background: #18181b;
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    outline: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: border-color 0.2s ease;
+}
+
+.form-group select:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 5px var(--color-gold-glow);
+}
+
+/* スタイリッシュなスクロールバー */
+.form-group select::-webkit-scrollbar {
+    width: 6px;
+}
+.form-group select::-webkit-scrollbar-track {
+    background: #18181b;
+}
+.form-group select::-webkit-scrollbar-thumb {
+    background: var(--color-gold-glow);
+    border-radius: 3px;
+}
+
+.modal-close-x {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.modal-close-x:hover {
+    color: #ef4444;
 }
 
 /* ⛩️ フッター */
